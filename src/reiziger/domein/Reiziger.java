@@ -1,7 +1,10 @@
 package reiziger.domein;
 
+import adres.domein.Adres;
+
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Reiziger {
 
@@ -10,6 +13,8 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private LocalDate geboortedatum;
+
+    private Adres adres;
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         this.reiziger_id = id;
@@ -60,14 +65,23 @@ public class Reiziger {
         return geboortedatum;
     }
 
+    public Adres getAdres() {
+        return adres;
+    }
+
+    public void setAdres(Adres adres) {
+        this.adres = adres;
+    }
+
     @Override
     public String toString() {
-        return "Reiziger{ " +
+        return "Reiziger{" +
                 "reiziger_id=" + reiziger_id +
                 ", voorletters='" + voorletters + '\'' +
                 ", tussenvoegsel='" + tussenvoegsel + '\'' +
                 ", achternaam='" + achternaam + '\'' +
                 ", geboortedatum=" + geboortedatum +
-                " }";
+                ", adres=" + adres +
+                '}';
     }
 }

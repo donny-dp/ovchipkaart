@@ -1,5 +1,7 @@
 package reiziger.dao;
 
+import adres.dao.AdresDAO;
+import adres.dao.AdresDAOPsql;
 import reiziger.domein.Reiziger;
 
 import java.sql.*;
@@ -8,10 +10,12 @@ import java.util.List;
 
 public class ReizigerDAOPsql implements ReizigerDAO{
 
-    Connection connection;
+    private Connection connection;
+    private AdresDAO adresDAO;
 
-    public ReizigerDAOPsql(Connection connection) {
+    public ReizigerDAOPsql(Connection connection, AdresDAO adresDAO) {
         this.connection = connection;
+        this.adresDAO = adresDAO;
     }
 
     @Override
@@ -22,7 +26,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
 
         ResultSet result = statement.executeQuery();
 
-        List<Reiziger> reizigers = new ArrayList<Reiziger>();
+        List<Reiziger> reizigers = new ArrayList<>();
 
         while (result.next()) {
             reizigers.add(buildReiziger(result));
@@ -117,12 +121,16 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     }
 
     private Reiziger buildReiziger(ResultSet result) throws SQLException {
-        return new Reiziger(
+        Reiziger reiziger = new Reiziger(
                 result.getInt("reiziger_id"),
                 result.getString("voorletters"),
                 result.getString("tussenvoegsel"),
                 result.getString("achternaam"),
                 result.getDate("geboortedatum")
         );
+
+        reiziger.setAdres(adresDAO.findByReiziger(reiziger));
+
+        return reiziger;
     }
 }

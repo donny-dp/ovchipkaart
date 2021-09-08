@@ -1,8 +1,12 @@
+import adres.dao.AdresDAO;
+import adres.dao.AdresDAOPsql;
+import adres.domein.Adres;
 import reiziger.dao.ReizigerDAO;
 import reiziger.dao.ReizigerDAOPsql;
 import reiziger.domein.Reiziger;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
@@ -15,9 +19,12 @@ public class Main {
         try {
             getConnection();
 
-            ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection);
+            AdresDAO adresDAO = new AdresDAOPsql(connection);
+            ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection, adresDAO);
+
 
             testReizigerDAO(reizigerDAO);
+            testAdresDAO(adresDAO, reizigerDAO);
 
             closeConnection();
         } catch (SQLException e) {
@@ -38,7 +45,7 @@ public class Main {
 
     /**
      * P2. Reiziger DAO: persistentie van een klasse
-     *
+     * <p>
      * Deze methode test de CRUD-functionaliteit van de Reiziger DAO
      *
      * @throws SQLException
@@ -82,5 +89,45 @@ public class Main {
         reizigers = rdao.findAll();
         System.out.println(reizigers.size() + " reizigers\n");
 
+    }
+
+    private static void testAdresDAO(AdresDAO adresDAO, ReizigerDAO reizigerDAO) throws SQLException {
+        System.out.println("\n---------- Test AdresDAO -------------");
+        List<Adres> adressen = adresDAO.findAll();
+        System.out.println("[Test] AdresDAO.findAll() geeft de volgende adressen:");
+        for (Adres adres : adressen) {
+            System.out.println(adres);
+        }
+        System.out.println();
+
+        Adres adres = new Adres(20, "3564DF", "23", "Kanarielaan", "Terneuzen", 10);
+        System.out.print("[Test] Eerst " + adressen.size() + " adressen, na AdresDAO.save() ");
+        adresDAO.save(adres);
+        adressen = adresDAO.findAll();
+        System.out.println(adressen.size() + " adressen\n");
+
+        System.out.println("[Test] adresDAO.findByReiziger() geeft het volgende resultaat");
+        Reiziger reiziger = reizigerDAO.findById(10);
+        System.out.println(adresDAO.findByReiziger(reiziger));
+
+        System.out.println();
+
+        System.out.println("[Test] Adres voor de AdresDAO.update()");
+        System.out.println(adresDAO.findById(20));
+        adres.setHuisnummer("67");
+        adresDAO.update(adres);
+
+        System.out.println();
+
+        System.out.println("[Test] Adres na de AdresDAO.update()");
+        System.out.println(adresDAO.findById(20));
+
+        System.out.println();
+
+        adressen = adresDAO.findAll();
+        System.out.print("[Test] Eerst " + adressen.size() + " adressen, na AdresDAO.delete() ");
+        adresDAO.delete(adres);
+        adressen = adresDAO.findAll();
+        System.out.println(adressen.size() + " adressen");
     }
 }
