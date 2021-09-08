@@ -1,5 +1,11 @@
-import java.sql.*;
-import java.util.Properties;
+import reiziger.dao.ReizigerDAO;
+import reiziger.dao.ReizigerDAOPsql;
+import reiziger.domein.Reiziger;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
 
 public class Main {
 
@@ -9,25 +15,59 @@ public class Main {
 
             Connection connection = DriverManager.getConnection(url, "postgres", "secret");
 
-            System.out.println("Connected to postgresql server successfully.");
+            ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection);
 
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM reiziger");
-            ResultSet result = statement.executeQuery();
-
-            System.out.println("Alle reizigers:");
-            while(result.next()) {
-
-                StringBuilder builder = new StringBuilder("#" + result.getString(1) + ": ");
-                builder.append(result.getString(2) + " ");
-                builder.append(result.getString(3) != null ? result.getString(3) + " " : "");
-                builder.append(result.getString(4) + " ");
-                builder.append("(" + result.getString(5) + ")");
-
-
-                System.out.println(builder);
-            }
+            testReizigerDAO(reizigerDAO);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * P2. Reiziger DAO: persistentie van een klasse
+     *
+     * Deze methode test de CRUD-functionaliteit van de Reiziger DAO
+     *
+     * @throws SQLException
+     */
+    private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
+        System.out.println("\n---------- Test ReizigerDAO -------------");
+
+        // Haal alle reizigers op uit de database
+        List<Reiziger> reizigers = rdao.findAll();
+        System.out.println("[Test] ReizigerDAO.findAll() geeft de volgende reizigers:");
+        for (Reiziger r : reizigers) {
+            System.out.println(r);
+        }
+        System.out.println();
+
+        // Maak een nieuwe reiziger aan en persisteer deze in de database
+        String gbdatum = "1981-03-14";
+        Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
+        System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
+        rdao.save(sietske);
+        reizigers = rdao.findAll();
+        System.out.println(reizigers.size() + " reizigers\n");
+
+
+        System.out.println("[Test] ReizigerDAO.update() geeft Sietske een nieuwe achternaam");
+        sietske.achternaam = "Jansen";
+        rdao.update(sietske);
+        System.out.println(rdao.find(77));
+
+        System.out.println();
+
+        Reiziger nieuweReiziger = rdao.find(77);
+        System.out.print("[Test] ReizigerDAO.find(77) geeft de volgende reiziger:");
+
+        System.out.println(nieuweReiziger.toString());
+
+        System.out.println();
+
+        System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.delete(77) ");
+        rdao.delete(77);
+        reizigers = rdao.findAll();
+        System.out.println(reizigers.size() + " reizigers\n");
+
     }
 }
