@@ -9,19 +9,32 @@ import java.util.List;
 
 public class Main {
 
+    static Connection connection;
+
     public static void main(String args[]) {
         try {
-            String url = "jdbc:postgresql://localhost:5432/ovchip";
-
-            Connection connection = DriverManager.getConnection(url, "postgres", "secret");
+            getConnection();
 
             ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection);
 
             testReizigerDAO(reizigerDAO);
+
+            closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    private static void getConnection() throws SQLException {
+        String url = "jdbc:postgresql://localhost:5432/ovchip";
+
+        connection = DriverManager.getConnection(url, "postgres", "secret");
+    }
+
+    private static void closeConnection() throws SQLException {
+        connection.close();
+    }
+
 
     /**
      * P2. Reiziger DAO: persistentie van een klasse
@@ -51,13 +64,13 @@ public class Main {
 
 
         System.out.println("[Test] ReizigerDAO.update() geeft Sietske een nieuwe achternaam");
-        sietske.achternaam = "Jansen";
+        sietske.setAchternaam("Jansen");
         rdao.update(sietske);
-        System.out.println(rdao.find(77));
+        System.out.println(rdao.findById(77));
 
         System.out.println();
 
-        Reiziger nieuweReiziger = rdao.find(77);
+        Reiziger nieuweReiziger = rdao.findById(77);
         System.out.print("[Test] ReizigerDAO.find(77) geeft de volgende reiziger:");
 
         System.out.println(nieuweReiziger.toString());
@@ -65,7 +78,7 @@ public class Main {
         System.out.println();
 
         System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.delete(77) ");
-        rdao.delete(77);
+        rdao.delete(rdao.findById(77));
         reizigers = rdao.findAll();
         System.out.println(reizigers.size() + " reizigers\n");
 

@@ -32,7 +32,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     }
 
     @Override
-    public Reiziger find(int id) throws SQLException {
+    public Reiziger findById(int id) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(
                 "SELECT * FROM reiziger WHERE reiziger_id = ?;"
         );
@@ -45,7 +45,27 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     }
 
     @Override
-    public void save(Reiziger reiziger) throws SQLException {
+    public List<Reiziger> findByGeboortedatum(String geboortedatum) throws SQLException {
+        PreparedStatement statement = this.connection.prepareStatement(
+                "SELECT * FROM reiziger WHERE  geboortedatum = ?;"
+        );
+
+        statement.setDate(1, Date.valueOf(geboortedatum));
+
+        ResultSet result = statement.executeQuery();
+
+        List<Reiziger> reizigers = new ArrayList<>();
+
+        while (result.next()) {
+            reizigers.add(buildReiziger(result));
+        }
+
+        return reizigers;
+
+    }
+
+    @Override
+    public boolean save(Reiziger reiziger) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(
                 "INSERT INTO reiziger " +
                     "(reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum) " +
@@ -53,41 +73,47 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                     "(?, ?, ?, ?, ?);"
         );
 
-        statement.setInt(1, reiziger.reiziger_id);
-        statement.setString(2, reiziger.voorletters);
-        statement.setString(3, reiziger.tussenvoegsel);
-        statement.setString(4, reiziger.achternaam);
+        statement.setInt(1, reiziger.getReiziger_id());
+        statement.setString(2, reiziger.getVoorletters());
+        statement.setString(3, reiziger.getTussenvoegsel());
+        statement.setString(4, reiziger.getAchternaam());
         statement.setDate(5, Date.valueOf(reiziger.getGeboortedatum()));
 
-        statement.executeUpdate();
+        int count = statement.executeUpdate();
+
+        return count > 0;
     }
 
     @Override
-    public void update(Reiziger reiziger) throws SQLException {
+    public boolean update(Reiziger reiziger) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(
                 "UPDATE reiziger SET " +
                     "voorletters = ?, tussenvoegsel = ?, achternaam = ?, geboortedatum = ? " +
                     "WHERE reiziger_id = ?"
         );
 
-        statement.setString(1, reiziger.voorletters);
-        statement.setString(2, reiziger.tussenvoegsel);
-        statement.setString(3, reiziger.achternaam);
+        statement.setString(1, reiziger.getVoorletters());
+        statement.setString(2, reiziger.getTussenvoegsel());
+        statement.setString(3, reiziger.getAchternaam());
         statement.setDate(4, Date.valueOf(reiziger.getGeboortedatum()));
-        statement.setInt(5, reiziger.reiziger_id);
+        statement.setInt(5, reiziger.getReiziger_id());
 
-        statement.executeUpdate();
+        int count = statement.executeUpdate();
+
+        return count > 0;
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public boolean delete(Reiziger reiziger) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(
                 "DELETE FROM reiziger WHERE reiziger_id = ?;"
         );
 
-        statement.setInt(1, id);
+        statement.setInt(1, reiziger.getReiziger_id());
 
-        statement.executeUpdate();
+        int count = statement.executeUpdate();
+
+        return count > 0;
     }
 
     private Reiziger buildReiziger(ResultSet result) throws SQLException {
