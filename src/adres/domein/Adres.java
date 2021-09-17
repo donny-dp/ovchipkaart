@@ -2,8 +2,6 @@ package adres.domein;
 
 import reiziger.domein.Reiziger;
 
-import java.util.Objects;
-
 public class Adres {
 
     private int id;

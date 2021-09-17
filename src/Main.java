@@ -1,6 +1,7 @@
 import adres.dao.AdresDAO;
 import adres.dao.AdresDAOPsql;
 import adres.domein.Adres;
+import ovchipkaart.domein.OVChipkaart;
 import reiziger.dao.ReizigerDAO;
 import reiziger.dao.ReizigerDAOPsql;
 import reiziger.domein.Reiziger;
@@ -22,9 +23,14 @@ public class Main {
             AdresDAO adresDAO = new AdresDAOPsql(connection);
             ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection, adresDAO);
 
+            Reiziger reiziger = reizigerDAO.findById(10);
 
-            testReizigerDAO(reizigerDAO);
-            testAdresDAO(adresDAO, reizigerDAO);
+            for (OVChipkaart kaart : reiziger.ovChipkaarten) {
+                System.out.println(kaart);
+            }
+
+//            testReizigerDAO(reizigerDAO);
+//            testAdresDAO(adresDAO, reizigerDAO);
 
             closeConnection();
         } catch (SQLException e) {

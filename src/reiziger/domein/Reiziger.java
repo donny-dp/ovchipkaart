@@ -1,9 +1,11 @@
 package reiziger.domein;
 
 import adres.domein.Adres;
+import ovchipkaart.domein.OVChipkaart;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Reiziger {
@@ -13,6 +15,7 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private LocalDate geboortedatum;
+    public List<OVChipkaart> ovChipkaarten = new ArrayList<>();
 
     private Adres adres;
 
@@ -23,6 +26,10 @@ public class Reiziger {
         this.achternaam = achternaam;
 
         setGeboortedatum(geboortedatum);
+    }
+
+    public Reiziger() {
+
     }
 
     public int getReiziger_id() {
@@ -73,6 +80,7 @@ public class Reiziger {
         this.adres = adres;
     }
 
+
     @Override
     public String toString() {
         return "Reiziger{" +
@@ -81,6 +89,7 @@ public class Reiziger {
                 ", tussenvoegsel='" + tussenvoegsel + '\'' +
                 ", achternaam='" + achternaam + '\'' +
                 ", geboortedatum=" + geboortedatum +
+                ", ovChipkaarten=" + ovChipkaarten +
                 ", adres=" + adres +
                 '}';
     }
