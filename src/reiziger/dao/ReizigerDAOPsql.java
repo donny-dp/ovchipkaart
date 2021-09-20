@@ -50,7 +50,6 @@ public class ReizigerDAOPsql implements ReizigerDAO{
         ResultSet result = statement.executeQuery();
 
 
-
         Reiziger reiziger = new Reiziger();
         while(result.next()) {
             reiziger.setReiziger_id(result.getInt("reiziger_id"));

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class OVChipkaartDAOPsql implements OVChipkaartDAO {
 
-    private Connection connection;
+    private final Connection connection;
 
     public OVChipkaartDAOPsql(Connection connection) {
         this.connection = connection;
@@ -18,7 +18,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public List<OVChipkaart> findByReiziger(Reiziger reiziger) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(
-                "SELECT * FROM ov_chipkaart WHERE reiziger_id = ?"
+                "SELECT * FROM ov_chipkaart WHERE reiziger_id = ?;"
         );
 
         statement.setInt(1, reiziger.getReiziger_id());
@@ -104,14 +104,12 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     }
 
     private OVChipkaart buildOvChipkaart(ResultSet result) throws SQLException {
-        OVChipkaart ovChipkaart = new OVChipkaart(
+        return new OVChipkaart(
                 result.getInt("kaart_nummer"),
                 result.getDate("geldig_tot"),
                 result.getInt("klasse"),
                 result.getDouble("saldo"),
                 result.getInt("reiziger_id")
         );
-
-        return ovChipkaart;
     }
 }
