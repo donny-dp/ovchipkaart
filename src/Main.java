@@ -23,13 +23,13 @@ public class Main {
             getConnection();
 
             AdresDAO adresDAO = new AdresDAOPsql(connection);
-            ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection, adresDAO);
-////            OVChipkaartDAO ovChipkaartDAO = new OVChipkaartDAOPsql(connection);
-//
-//
+            ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection);
+            OVChipkaartDAO ovChipkaartDAO = new OVChipkaartDAOPsql(connection);
+
+
             testReizigerDAO(reizigerDAO);
-////            testAdresDAO(adresDAO, reizigerDAO);
-////            testOvcihpkaartDAO(ovChipkaartDAO, reizigerDAO);
+            testAdresDAO(adresDAO, reizigerDAO);
+            testOvcihpkaartDAO(ovChipkaartDAO, reizigerDAO);
 
             closeConnection();
         } catch (SQLException e) {

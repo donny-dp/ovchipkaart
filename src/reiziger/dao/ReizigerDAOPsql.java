@@ -1,6 +1,7 @@
 package reiziger.dao;
 
 import adres.dao.AdresDAO;
+import adres.dao.AdresDAOPsql;
 import ovchipkaart.domein.OVChipkaart;
 import reiziger.domein.Reiziger;
 
@@ -13,9 +14,9 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     private Connection connection;
     private AdresDAO adresDAO;
 
-    public ReizigerDAOPsql(Connection connection, AdresDAO adresDAO) {
+    public ReizigerDAOPsql(Connection connection) {
         this.connection = connection;
-        this.adresDAO = adresDAO;
+        this.adresDAO = new AdresDAOPsql(connection);
     }
 
     @Override
@@ -134,7 +135,8 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                 result.getDate("geboortedatum")
         );
 
-//        reiziger.setAdres(adresDAO.findByReiziger(reiziger));
+        AdresDAO adresDAO = new AdresDAOPsql(this.connection);
+        reiziger.setAdres(adresDAO.findByReiziger(reiziger));
 
         return reiziger;
     }

@@ -15,9 +15,9 @@ public class Reiziger {
     private String tussenvoegsel;
     private String achternaam;
     private LocalDate geboortedatum;
-//    public List<OVChipkaart> ovChipkaarten = new ArrayList<>();
+    public List<OVChipkaart> ovChipkaarten = new ArrayList<>();
 
-//    public Adres adres;
+    public Adres adres;
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
         setId(id);
@@ -67,6 +67,21 @@ public class Reiziger {
         return geboortedatum;
     }
 
+    public Adres getAdres() {
+        return adres;
+    }
+
+    public void setAdres(Adres adres) {
+        this.adres = adres;
+    }
+
+    public List<OVChipkaart> getOvChipkaarten() {
+        return ovChipkaarten;
+    }
+
+    public void setOvChipkaarten(List<OVChipkaart> ovChipkaarten) {
+        this.ovChipkaarten = ovChipkaarten;
+    }
 
     @Override
     public String toString() {
@@ -76,8 +91,8 @@ public class Reiziger {
                 ", tussenvoegsel='" + tussenvoegsel + '\'' +
                 ", achternaam='" + achternaam + '\'' +
                 ", geboortedatum=" + geboortedatum +
-//                ", ovChipkaarten=" + ovChipkaarten +
-//                ", adres=" + adres +
+                ", ovChipkaarten=" + ovChipkaarten +
+                ", adres=" + adres +
                 '}';
     }
 }

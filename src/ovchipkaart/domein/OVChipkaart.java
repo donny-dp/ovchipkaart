@@ -80,6 +80,7 @@ public class OVChipkaart {
                 ", klasse=" + klasse +
                 ", saldo=" + saldo +
                 ", reiziger_id=" + reiziger_id +
+                ", reiziger=" + reiziger +
                 '}';
     }
 }

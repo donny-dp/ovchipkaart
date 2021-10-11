@@ -1,6 +1,7 @@
 package ovchipkaart.dao;
 
 import ovchipkaart.domein.OVChipkaart;
+import reiziger.dao.ReizigerDAOPsql;
 import reiziger.domein.Reiziger;
 
 import java.sql.*;
@@ -104,12 +105,17 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     }
 
     private OVChipkaart buildOvChipkaart(ResultSet result) throws SQLException {
-        return new OVChipkaart(
+        OVChipkaart ovChipkaart = new OVChipkaart(
                 result.getInt("kaart_nummer"),
                 result.getDate("geldig_tot"),
                 result.getInt("klasse"),
                 result.getDouble("saldo"),
                 result.getInt("reiziger_id")
         );
+
+        ReizigerDAOPsql reizigerDAOPsql = new ReizigerDAOPsql(this.connection);
+        ovChipkaart.setReiziger(reizigerDAOPsql.findById(ovChipkaart.getReiziger_id()));
+
+        return ovChipkaart;
     }
 }

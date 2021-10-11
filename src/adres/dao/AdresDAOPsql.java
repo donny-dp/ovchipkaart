@@ -120,7 +120,7 @@ public class AdresDAOPsql implements AdresDAO {
 
     private Adres buildAdres(ResultSet result) throws SQLException {
 
-        return new Adres(
+        Adres adres = new Adres(
             result.getInt("adres_id"),
             result.getString("postcode"),
             result.getString("huisnummer"),
@@ -128,5 +128,7 @@ public class AdresDAOPsql implements AdresDAO {
             result.getString("woonplaats"),
             result.getInt("reiziger_id")
         );
+
+        return adres;
     }
 }

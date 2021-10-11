@@ -10,7 +10,6 @@ public class Adres {
     private String straat;
     private String woonplaats;
     private int reiziger_id;
-    private Reiziger reiziger;
 
     public Adres() {
 
@@ -71,14 +70,6 @@ public class Adres {
 
     public void setReiziger_id(int reiziger_id) {
         this.reiziger_id = reiziger_id;
-    }
-
-    public Reiziger getReiziger() {
-        return reiziger;
-    }
-
-    public void setReiziger(Reiziger reiziger) {
-        this.reiziger = reiziger;
     }
 
     @Override
