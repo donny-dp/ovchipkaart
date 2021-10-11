@@ -18,18 +18,18 @@ public class Main {
 
     static Connection connection;
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             getConnection();
 
             AdresDAO adresDAO = new AdresDAOPsql(connection);
             ReizigerDAO reizigerDAO = new ReizigerDAOPsql(connection, adresDAO);
-            OVChipkaartDAO ovChipkaartDAO = new OVChipkaartDAOPsql(connection);
-
-
-//            testReizigerDAO(reizigerDAO);
-//            testAdresDAO(adresDAO, reizigerDAO);
-            testOvcihpkaartDAO(ovChipkaartDAO, reizigerDAO);
+////            OVChipkaartDAO ovChipkaartDAO = new OVChipkaartDAOPsql(connection);
+//
+//
+            testReizigerDAO(reizigerDAO);
+////            testAdresDAO(adresDAO, reizigerDAO);
+////            testOvcihpkaartDAO(ovChipkaartDAO, reizigerDAO);
 
             closeConnection();
         } catch (SQLException e) {

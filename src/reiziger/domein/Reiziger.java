@@ -10,42 +10,37 @@ import java.util.List;
 
 public class Reiziger {
 
-    private int reiziger_id;
+    private int id;
     private String voorletters;
     private String tussenvoegsel;
     private String achternaam;
     private LocalDate geboortedatum;
-    public List<OVChipkaart> ovChipkaarten = new ArrayList<>();
+//    public List<OVChipkaart> ovChipkaarten = new ArrayList<>();
 
-    private Adres adres;
+//    public Adres adres;
 
     public Reiziger(int id, String voorletters, String tussenvoegsel, String achternaam, Date geboortedatum) {
-        this.reiziger_id = id;
-        this.voorletters = voorletters;
-        this.tussenvoegsel = tussenvoegsel;
-        this.achternaam = achternaam;
-
+        setId(id);
+        setVoorletters(voorletters);
+        setTussenvoegsel(tussenvoegsel);
+        setAchternaam(achternaam);
         setGeboortedatum(geboortedatum);
     }
 
-    public Reiziger() {
-
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getReiziger_id() {
-        return reiziger_id;
-    }
-
-    public void setReiziger_id(int reiziger_id) {
-        this.reiziger_id = reiziger_id;
-    }
-
-    public String getVoorletters() {
-        return voorletters;
+    public int getId() {
+        return id;
     }
 
     public void setVoorletters(String voorletters) {
         this.voorletters = voorletters;
+    }
+
+    public String getVoorletters() {
+        return voorletters;
     }
 
     public String getTussenvoegsel() {
@@ -72,25 +67,17 @@ public class Reiziger {
         return geboortedatum;
     }
 
-    public Adres getAdres() {
-        return adres;
-    }
-
-    public void setAdres(Adres adres) {
-        this.adres = adres;
-    }
-
 
     @Override
     public String toString() {
         return "Reiziger{" +
-                "reiziger_id=" + reiziger_id +
+                "reiziger_id=" + id +
                 ", voorletters='" + voorletters + '\'' +
                 ", tussenvoegsel='" + tussenvoegsel + '\'' +
                 ", achternaam='" + achternaam + '\'' +
                 ", geboortedatum=" + geboortedatum +
-                ", ovChipkaarten=" + ovChipkaarten +
-                ", adres=" + adres +
+//                ", ovChipkaarten=" + ovChipkaarten +
+//                ", adres=" + adres +
                 '}';
     }
 }

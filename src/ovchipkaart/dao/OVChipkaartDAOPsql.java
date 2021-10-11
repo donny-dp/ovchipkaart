@@ -21,7 +21,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 "SELECT * FROM ov_chipkaart WHERE reiziger_id = ?;"
         );
 
-        statement.setInt(1, reiziger.getReiziger_id());
+        statement.setInt(1, reiziger.getId());
 
         ResultSet result =  statement.executeQuery();
 

@@ -75,7 +75,7 @@ public class AdresDAOPsql implements AdresDAO {
                 "SELECT * FROM adres WHERE reiziger_id = ?;"
         );
 
-        statement.setInt(1, reiziger.getReiziger_id());
+        statement.setInt(1, reiziger.getId());
 
         ResultSet result = statement.executeQuery();
 

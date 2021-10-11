@@ -1,7 +1,6 @@
 package reiziger.dao;
 
 import adres.dao.AdresDAO;
-import adres.dao.AdresDAOPsql;
 import ovchipkaart.domein.OVChipkaart;
 import reiziger.domein.Reiziger;
 
@@ -39,35 +38,19 @@ public class ReizigerDAOPsql implements ReizigerDAO{
     @Override
     public Reiziger findById(int id) throws SQLException {
         PreparedStatement statement = this.connection.prepareStatement(
-                "SELECT r.reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum, kaart_nummer, geldig_tot, klasse, saldo " +
-                    "FROM reiziger r " +
-                    "JOIN ov_chipkaart oc on r.reiziger_id = oc.reiziger_id " +
-                    "WHERE r.reiziger_id = ?;"
+                "SELECT reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum " +
+                    "FROM reiziger WHERE reiziger_id = ?;"
         );
 
         statement.setInt(1, id);
 
         ResultSet result = statement.executeQuery();
 
-
-        Reiziger reiziger = new Reiziger();
-        while(result.next()) {
-            reiziger.setReiziger_id(result.getInt("reiziger_id"));
-            reiziger.setVoorletters(result.getString("voorletters"));
-            reiziger.setVoorletters(result.getString("tussenvoegsel"));
-            reiziger.setAchternaam(result.getString("achternaam"));
-            reiziger.setGeboortedatum(result.getDate("geboortedatum"));
-
-            OVChipkaart kaart = new OVChipkaart();
-            kaart.setReiziger(reiziger);
-            kaart.setGeldig_tot(result.getDate("geldig_tot"));
-            kaart.setKlasse(result.getInt("klasse"));
-            kaart.setSaldo(result.getDouble("saldo"));
-
-            reiziger.ovChipkaarten.add(kaart);
+        if(result.next()) {
+            return buildReiziger(result);
         }
 
-        return reiziger;
+        return null;
     }
 
     @Override
@@ -99,7 +82,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                     "(?, ?, ?, ?, ?);"
         );
 
-        statement.setInt(1, reiziger.getReiziger_id());
+        statement.setInt(1, reiziger.getId());
         statement.setString(2, reiziger.getVoorletters());
         statement.setString(3, reiziger.getTussenvoegsel());
         statement.setString(4, reiziger.getAchternaam());
@@ -122,7 +105,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
         statement.setString(2, reiziger.getTussenvoegsel());
         statement.setString(3, reiziger.getAchternaam());
         statement.setDate(4, Date.valueOf(reiziger.getGeboortedatum()));
-        statement.setInt(5, reiziger.getReiziger_id());
+        statement.setInt(5, reiziger.getId());
 
         int count = statement.executeUpdate();
 
@@ -135,7 +118,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                 "DELETE FROM reiziger WHERE reiziger_id = ?;"
         );
 
-        statement.setInt(1, reiziger.getReiziger_id());
+        statement.setInt(1, reiziger.getId());
 
         int count = statement.executeUpdate();
 
@@ -151,7 +134,7 @@ public class ReizigerDAOPsql implements ReizigerDAO{
                 result.getDate("geboortedatum")
         );
 
-        reiziger.setAdres(adresDAO.findByReiziger(reiziger));
+//        reiziger.setAdres(adresDAO.findByReiziger(reiziger));
 
         return reiziger;
     }
